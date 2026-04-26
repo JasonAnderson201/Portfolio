@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53c4e684423baea4cae67d73d11d52ea, type: 3}
+  m_Name: PoisonAttack
+  m_EditorClassIdentifier: 
+  actionName: Poison
+  damage: 0
+  targetType: 0
+  damageType: 1
+  modifierStat: 
+  statusEffect:
+    enabled: 1
+    val: {fileID: 11400000, guid: 191a570995bca06448690eddc2344614, type: 2}
