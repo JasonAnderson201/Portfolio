@@ -71,7 +71,6 @@ public class Character : MonoBehaviour, IComparable<Character>
     {
         foreach(StatusEffectData effect in activeEffects)
         {
-            Debug.Log($" {gameObject} Effect");
             effect.effect.TickEffect(out bool canRemove);
             if(canRemove)
                 activeEffects.Remove(effect);
@@ -85,6 +84,25 @@ public class Character : MonoBehaviour, IComparable<Character>
 
     public void ApplyStatusEffect(StatusEffectData data)
     {
+        //check if effect is already applied and applied less than max amount
+        if (activeEffects.Contains(data))
+        {
+            if (!data.effect.stackable)
+                return;
+
+            int appliedCount = 0;
+            for(int i = 0; i < activeEffects.Count; i++)
+            {
+                if (activeEffects[i].effect.effectName == data.effect.effectName)
+                {
+                    appliedCount++;
+
+                    if (appliedCount > data.effect.maxStacks)
+                        return;
+                }
+            }
+        }
+
         data.effect = data.effect.Clone(data.target);
 
         activeEffects.Add(data);

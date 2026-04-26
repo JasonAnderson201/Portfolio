@@ -15,6 +15,7 @@ public class CombatEntry : MonoBehaviour
             message += $"and dealt {attack.damage} damage";
         }
 
+
         text.text = message;
     }
 }

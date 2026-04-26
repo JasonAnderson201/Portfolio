@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cbd9c1d3238c334d94fb183894e5d0f, type: 3}
   m_Name: First Player
   m_EditorClassIdentifier: 
-  characterName: Original John
-  maxHealth: 10
+  characterName: First Player
+  maxHealth: 15
   stats:
   - statName: Strength
     statValue: 2

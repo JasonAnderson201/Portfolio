@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea5fa62beb85bbd489a47d870ffc79d0, type: 3}
-  m_Name: WeakenEffect
+  m_Name: Poison
   m_EditorClassIdentifier: 
-  effectOnApply: 1
-  effectType: 2
+  effectOnApply: 0
+  effectType: 1
   target: {fileID: 0}
   duration: 3
   tickDamage: 1
   statToModifyAndAmount:
-    statName: Strength
-    statValue: -1
+    statName: 
+    statValue: 0

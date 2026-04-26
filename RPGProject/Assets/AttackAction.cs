@@ -3,6 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Action", menuName = "Data/Actions/AttackAction")]
 public class AttackAction : Action
 {
+    public int damage;
+    public DamageType damageType;
+    public string modifierStat;
+
     public Optional<StatusEffect> statusEffect;
 
     public override void DoAction(ActionData data)

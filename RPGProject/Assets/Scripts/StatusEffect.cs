@@ -4,10 +4,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "StatusEffect", menuName = "Data/StatusEffect")]
 public class StatusEffect : ScriptableObject
 {
+    public string effectName;
     public bool effectOnApply;
     public EffectType effectType;
     public Character target;
     private int appliedCountdown;
+    public bool stackable;
+    [ShowIf("stackable", true, true)] public int maxStacks = 999;
 
     [Header("Effect Type Variables")]
     [Tooltip("Effects with duration 0 are only removed when target dies or cleanses")] public int duration;
@@ -16,6 +19,10 @@ public class StatusEffect : ScriptableObject
 
     private bool onApplyTriggered;
 
+    public void OnValidate()
+    {
+        effectName = name;
+    }
 
     public StatusEffect Clone(Character Target)
     {

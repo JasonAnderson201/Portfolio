@@ -7,6 +7,7 @@ public class CombatLog : MonoBehaviour
 {
     [SerializeField] private CombatEntry combatLogEntryPrefab;
     [SerializeField] private List<CombatEntry> combatEntries;
+    [SerializeField] private Transform contentParent;
 
     private List<Character> characters = new List<Character>();
 
@@ -46,7 +47,7 @@ public class CombatLog : MonoBehaviour
 
     private void AddEntry(ActionData data)
     {
-        CombatEntry newEntry = Instantiate(combatLogEntryPrefab, transform);
+        CombatEntry newEntry = Instantiate(combatLogEntryPrefab, contentParent);
         newEntry.Setup(data);
 
         combatEntries.Add(newEntry);

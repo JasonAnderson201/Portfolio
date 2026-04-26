@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53c4e684423baea4cae67d73d11d52ea, type: 3}
-  m_Name: WeakenAttack
+  m_Script: {fileID: 11500000, guid: 6b60ba535db640846bfb2801ee08ec75, type: 3}
+  m_Name: Weaken
   m_EditorClassIdentifier: 
   actionName: Weaken
-  damage: 0
   targetType: 0
-  statusEffect:
-    enabled: 1
-    val: {fileID: 11400000, guid: 5e0c002f15ea22647862c940bc43f03b, type: 2}
+  statusEffect: {fileID: 11400000, guid: 5e0c002f15ea22647862c940bc43f03b, type: 2}
