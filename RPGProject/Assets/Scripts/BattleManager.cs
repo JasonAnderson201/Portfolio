@@ -66,6 +66,12 @@ public class BattleManager : MonoBehaviour
             initiative.Add(data.user);
         }
 
+        for(int i = 0; i < initiative.Count; i++)
+        {
+            if (initiative[i].currentHealth <= 0)
+                initiative.Remove(initiative[i]);
+        }
+
         activeCharacter = initiative[0];
         activeCharacter.onCharacterUseAction += OnUseAction;
         activeCharacter.SetIsActiveCharacter();
