@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static AttacksPanel;
@@ -50,83 +51,82 @@ public class AttacksPanel : MonoBehaviour
 
         activePlayer = BattleManager.instance.activeCharacter as PlayerCharacter;
 
+        List<Action> actionsToPass = new List<Action>();
+
+        //instantiate buttons based on different lists
         if(actionType == ActionType.Attacks)
         {
-            for (int i = 0; i < activePlayer.actions.Length; i++)
-            {
-                ActionButton newButton = Instantiate(actionPrefab, transform);
-
-                newButton.Setup(activePlayer.actions[i]);
-
-                newButton.onClick += ActionSelect;
-
-                actionButtons.Add(newButton);
-            }
+            actionsToPass.AddRange(activePlayer.actions);
+            InstantiateActionButtons(actionsToPass);
         }
         else
         {
-            for (int i = 0; i < activePlayer.items.Length; i++)
-            {
-                ActionButton newButton = Instantiate(actionPrefab, transform);
-
-                newButton.Setup(activePlayer.items[i]);
-
-                newButton.onClick += ItemSelect;
-
-                actionButtons.Add(newButton);
-            }
+            actionsToPass.AddRange(activePlayer.items);
+            InstantiateActionButtons(actionsToPass);
         }
+    }
 
+    private void InstantiateActionButtons(List<Action> actionList)
+    {
+        for (int i = 0; i < actionList.Count; i++)
+        {
+            ActionButton newButton = Instantiate(actionPrefab, transform);
 
+            newButton.Setup(actionList[i]);
+
+            newButton.onClick += ActionSelect;
+
+            actionButtons.Add(newButton);
+        }
     }
 
     private void ActionSelect(Action Action)
     {
+        if (BattleManager.instance.activeCharacter.actionPoints < Action.pointCost)
+            return;
+
         switch (Action.targetType)
         {
             case Action.TargetType.Single:
                 targetsPanel.SetActive(true);
+                InstantiateButtons(BattleManager.instance.enemies, Action);
 
-                foreach(Character target in BattleManager.instance.enemies)
-                {
-                    if (target.currentHealth >= 0)
-                    {
-                        Button newButton = Instantiate(actionPrefab, targetsPanel.transform).GetComponent<Button>();
-                        newButton.GetComponentInChildren<TextMeshProUGUI>().text = target.stats.characterName;
-                        targetsButtons.Add(newButton);
+            break;
 
-                        newButton.onClick.AddListener(() => 
-                        {
-                            ActionData actionStruct = new ActionData()
-                            {
-                                user = BattleManager.instance.activeCharacter,
-                                target = target,
-                                action = Action
-                            };
-                            BattleManager.instance.activeCharacter.DoAction(actionStruct);
-                            ClosePanel();
-                        });
-                    }
-                }
+            case Action.TargetType.Friendly:
+                targetsPanel.SetActive(true);
+                InstantiateButtons(BattleManager.instance.party, Action);
                 break;
         }
 
     }
 
-    private void ItemSelect(Action item)
+    public void InstantiateButtons(Character[] targets, Action Action)
     {
-        switch (item.targetType)
+        foreach (Character target in targets)
         {
-            case Action.TargetType.Single:
+            if (target.currentHealth >= 0)
+            {
+                Button newButton = Instantiate(actionPrefab, targetsPanel.transform).GetComponent<Button>();
+                newButton.GetComponentInChildren<TextMeshProUGUI>().text = target.stats.characterName;
+                targetsButtons.Add(newButton);
 
-                break;
-
-            case Action.TargetType.Self:
-
-                break;
+                newButton.onClick.AddListener(() =>
+                {
+                    ActionData actionStruct = new ActionData()
+                    {
+                        user = BattleManager.instance.activeCharacter,
+                        target = target,
+                        action = Action
+                    };
+                    BattleManager.instance.activeCharacter.DoAction(actionStruct);
+                    ClosePanel();
+                });
+            }
         }
     }
 
+    //turn off all un-needed objects and unsubscribe from events
     private void ClosePanel()
     {
         targetsPanel.SetActive(false);

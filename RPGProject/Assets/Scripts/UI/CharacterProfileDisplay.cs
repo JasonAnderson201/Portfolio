@@ -1,20 +1,31 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CharacterProfileDisplay : MonoBehaviour
 {
-    private CharacterStats character;
+    private Character character;
 
     [SerializeField] private TextMeshProUGUI charName;
     [SerializeField] private Image characterPortrait;
+    [SerializeField] private Slider healthSlider;
 
 
-    public void Setup(CharacterStats Character)
+    public void Setup(Character Character)
     {
         character = Character;
 
-        charName.text = character.characterName;
-        characterPortrait.sprite = character.characterPortrait;
+        charName.text = character.CharacterName;
+        characterPortrait.sprite = character.stats.characterPortrait;
+
+        healthSlider.maxValue = character.stats.maxHealth;
+        healthSlider.value = character.currentHealth;
+        character.onTakeDamage += UpdateHealthDisplay;
+    }
+
+    private void UpdateHealthDisplay(int currentHealth)
+    {
+        healthSlider.value = currentHealth;
     }
 }

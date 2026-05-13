@@ -9,7 +9,7 @@ public class StatusEffectAction : Action
     {
         StatusEffectData newData = new StatusEffectData()
         {
-            owner = data.user,
+            user = data.user,
             target = data.target,
             effect = statusEffect
         };

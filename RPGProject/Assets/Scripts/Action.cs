@@ -5,6 +5,7 @@ public abstract class Action : ScriptableObject
 {
     public string actionName;
     public TargetType targetType;
+    public int pointCost;
 
     public abstract void DoAction(ActionData data);
 
@@ -16,8 +17,6 @@ public abstract class Action : ScriptableObject
         Friendly,
         Self
     }
-
-
 }
 
 public struct ActionData

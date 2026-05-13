@@ -42,6 +42,8 @@ public class EnemyCharacter : Character
         data.action.DoAction(data);
 
         base.DoAction(data);
+
+        PassTurn();
     }
 
     public Action GetAction()
@@ -49,14 +51,14 @@ public class EnemyCharacter : Character
         switch (enemyBehaviour)
         {
             case EnemyBehaviourType.Random:
-                return actions[Random.Range(0, actions.Length)];
+                return actions[Random.Range(0, actions.Count)];
 
             case EnemyBehaviourType.Weighted:
                 Action returnAction = actions[0];
 
                 int hightestWeight = 999;
 
-                for(int i = 0; i < actions.Length; i++)
+                for(int i = 0; i < actions.Count; i++)
                 {
                     int curWeight = 0;
                     int historyCount = 0;
@@ -76,7 +78,7 @@ public class EnemyCharacter : Character
                 return returnAction;
         }
 
-        return actions[Random.Range(0, actions.Length)];
+        return actions[Random.Range(0, actions.Count)];
     }
 
     public Character GetTarget()

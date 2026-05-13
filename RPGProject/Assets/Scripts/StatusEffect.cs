@@ -78,7 +78,7 @@ public class StatusEffect : ScriptableObject
 [System.Serializable]
 public struct StatusEffectData
 {
-    public Character owner;
+    public Character user;
     public Character target;
     public StatusEffect effect;
 }

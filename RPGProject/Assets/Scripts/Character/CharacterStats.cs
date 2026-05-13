@@ -7,7 +7,14 @@ public class CharacterStats : ScriptableObject
 {
     public string characterName;
     public int maxHealth;
-    public Stat[] stats;
+    public Stat[] stats; 
+
+    //default stats:
+    //Strength, = physical damage
+    //Dexterity,
+    //Vitality, = health
+    //Int, = magic damage
+    //WillPower, action point regen per turn
 
     public Sprite characterPortrait;
 

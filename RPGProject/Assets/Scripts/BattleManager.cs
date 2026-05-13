@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
+
 
 public class BattleManager : MonoBehaviour
 {
     public static event Action<List<Character>> battleStart;
 
     public BattleMenu battleMenu;
+    public ActionPointUI actionUI;
 
     public Character[] enemies;
     public PlayerCharacter[] party;
@@ -51,19 +52,24 @@ public class BattleManager : MonoBehaviour
 
         initiative = characters;
         activeCharacter = initiative[0];
-        activeCharacter.onCharacterUseAction += OnUseAction;
+        activeCharacter.onCharacterPass += OnPassTurn;
         battleStart?.Invoke(characters);
 
         activeCharacter.SetIsActiveCharacter();
+
+        if(activeCharacter as PlayerCharacter)
+        {
+            actionUI.UpdateUI();
+        }
     }
 
-    private void OnUseAction(ActionData data)
+    private void OnPassTurn(Character character)
     {
-        if (initiative.Contains(data.user))
+        if (initiative.Contains(character))
         {
-            data.user.onCharacterUseAction -= OnUseAction;
-            initiative.Remove(data.user);
-            initiative.Add(data.user);
+            character.onCharacterPass -= OnPassTurn;
+            initiative.Remove(character);
+            initiative.Add(character);
         }
 
         for(int i = 0; i < initiative.Count; i++)
@@ -73,11 +79,16 @@ public class BattleManager : MonoBehaviour
         }
 
         activeCharacter = initiative[0];
-        activeCharacter.onCharacterUseAction += OnUseAction;
+        activeCharacter.onCharacterPass += OnPassTurn;
         activeCharacter.SetIsActiveCharacter();
 
 
         battleMenu.UpdateCards();
+
+        if (activeCharacter as PlayerCharacter)
+        {
+            actionUI.UpdateUI();
+        }
     }
 
     public List<Character> GetInitiative() {  return initiative; }

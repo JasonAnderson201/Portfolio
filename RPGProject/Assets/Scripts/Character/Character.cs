@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class Character : MonoBehaviour, IComparable<Character>
 {
+    public event Action<Character> onCharacterPass;
     public event Action<ActionData> onCharacterUseAction;
+    public event Action<int> onTakeDamage;
 
     [Header("Local refs")]
     public CharacterStats stats;
     public List<StatusEffectData> activeEffects = new List<StatusEffectData>();
+
+    public string CharacterName { get { return stats.characterName; } }
 
     //preset stats
     public Stat Strength { get { return FindStat("Strength"); } }
@@ -17,8 +21,9 @@ public class Character : MonoBehaviour, IComparable<Character>
 
 
     public int currentHealth;
-    public Action[] actions;
-    public Item[] items;
+    public int actionPoints;
+    public List<Action> actions = new List<Action>();
+    public List<Item> items = new List<Item>();
 
     private void Start()
     {
@@ -35,25 +40,24 @@ public class Character : MonoBehaviour, IComparable<Character>
     public void TakeDamage(int damage, DamageType dmgType)
     {
         int calculatedDamage = damage;
+
+        //check if healing
+        if(calculatedDamage > 0)
         calculatedDamage -= dmgType == DamageType.Physical ? Defence.statValue : 0;
 
-        if(calculatedDamage > 0)
-        {
-            currentHealth -= calculatedDamage;
-        }
+        currentHealth = Mathf.Clamp(currentHealth - calculatedDamage, 0, stats.maxHealth);
 
-
-
-        if(currentHealth <= 0)
+        if (currentHealth <= 0)
         {
             GetComponent<MeshRenderer>().material.color = Color.red;
         }
+
+        onTakeDamage?.Invoke(currentHealth);
     }
 
     public void ModifyStat(string statToModify, int modifyAmount, int duration = 0)
     {
         FindStat(statToModify).statValue += modifyAmount;
-
     }
 
     public ref Stat FindStat(string StatName)
@@ -75,10 +79,14 @@ public class Character : MonoBehaviour, IComparable<Character>
             if(canRemove)
                 activeEffects.Remove(effect);
         }
+
+        actionPoints += FindStat("WillPower").statValue;
+        actionPoints = Mathf.Clamp(actionPoints, 0, 8);
     }
 
     public virtual void DoAction(ActionData data)
     {
+        actionPoints -= data.action.pointCost;
         onCharacterUseAction?.Invoke(data);
     }
 
@@ -108,5 +116,10 @@ public class Character : MonoBehaviour, IComparable<Character>
         activeEffects.Add(data);
 
         data.effect.OnApplyEffect();
+    }
+
+    public void PassTurn()
+    {
+        onCharacterPass?.Invoke(this);
     }
 }

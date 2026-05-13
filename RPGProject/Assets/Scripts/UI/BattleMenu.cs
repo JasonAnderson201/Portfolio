@@ -38,7 +38,7 @@ public class BattleMenu : MonoBehaviour
         {
             CharacterProfileDisplay newCard = Instantiate(displayerPrefab);
             newCard.transform.parent = initiativeMenu.transform;
-            newCard.Setup(BattleManager.instance.GetInitiative()[i].stats);
+            newCard.Setup(BattleManager.instance.GetInitiative()[i]);
             displays.Add(newCard);
         }
 
@@ -52,5 +52,10 @@ public class BattleMenu : MonoBehaviour
             actionsMenu.SetActive(false);
         }
 
+    }
+
+    public void OnPassButtonPress()
+    {
+        BattleManager.instance.activeCharacter.PassTurn();
     }
 }
